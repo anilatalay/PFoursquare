@@ -14,6 +14,7 @@ namespace PFoursquare.API.Controllers.v1
         // TODO: Url Appsetting Dosyasında Okunabilir
         private readonly string VenuesCategoriesUrl = "https://api.foursquare.com/v2/venues/categories";
         private readonly string VenuesDetailsUrl = "https://api.foursquare.com/v2/venues";
+        private readonly string VenuesSearchUrl = "https://api.foursquare.com/v2/venues/search";
         private readonly Dictionary<string, IEnumerable<string>> _headers;
 
         public VenuesController()
@@ -25,7 +26,7 @@ namespace PFoursquare.API.Controllers.v1
         }
 
         /// <summary>
-        /// Get categories of Venues
+        /// Get categories of venues
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -62,13 +63,67 @@ namespace PFoursquare.API.Controllers.v1
             }
         }
 
-        //[HttpGet]
-        //public ApiReturn<string> Search()
-        //{
-        //    // TODO: Arama Ksımı İçin Bölge Problemine Bakılacak
-        //    return null;
-        //}
+        /// <summary>
+        /// Get venues by criteria
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPost("Search")]
+        public async Task<ApiReturn<List<RVenue>>> Search([FromBody] MSearch value)
+        {
+            try
+            {
+                if (value == null)
+                    return new ApiReturn<List<RVenue>>
+                    {
+                        Code = ApiStatusCode.InternalServerError,
+                        Message = "Id Boş Bırakılamaz."
+                    };
 
+                // TODO: Arama Kısmı İçin Filter Yazılabilir
+                var parameters = new StringBuilder();
+                if (value.Area != null)
+                    parameters.Append($"{NearHeaderKey}={value.Area}&");
+
+                if (value.CategoryId != null)
+                    parameters.Append($"{CategoryIdHeaderKey}={value.CategoryId}&");
+
+                if (value.Location != null)
+                    parameters.Append($"{LocationHeaderKey}={value.Location}&");
+
+                var url = $"{VenuesSearchUrl}?{parameters.ToString()}{AuthInfo.ToString()}";
+                var response = await HttpRequest.GetResponse<MBase>(url, GetMethodName, null, _headers);
+                if (response == null)
+                    return new ApiReturn<List<RVenue>>
+                    {
+                        Code = ApiStatusCode.InternalServerError,
+                        Message = "Mekan Alınamadı"
+                    };
+
+                var venues = AutoMapper.Mapper.Map<List<RVenue>>(response.Response.Venues);
+
+                return new ApiReturn<List<RVenue>>
+                {
+                    Data = venues,
+                    Code = ApiStatusCode.Success,
+                    Message = "ok"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiReturn<List<RVenue>>
+                {
+                    Code = ApiStatusCode.InternalServerError,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Get a detail of venues
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ApiReturn<RVenue>> Details(string id)
         {

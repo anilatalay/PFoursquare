@@ -12,6 +12,9 @@ namespace PFoursquare.API.Base
         protected const string ClientSecretHeaderValue = "";
         protected const string VersionHeaderKey = "v";
         protected const string VersionHeaderValue = "20170801";
+        protected const string NearHeaderKey = "near";
+        protected const string CategoryIdHeaderKey = "categoryId";
+        protected const string LocationHeaderKey = "ll";
         protected const string GetMethodName = "GET";
         protected const string ContentTypeHeaderKey = "Content-Type";
         protected const string JsonContentType = "application/json";
