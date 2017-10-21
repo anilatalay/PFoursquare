@@ -8,7 +8,12 @@ namespace PFoursquare.API.Config
         {
             AutoMapper.Mapper.Initialize(config =>
             {
-                config.CreateMap<Category, RCategory>()
+                config.CreateMap<RCategory, MCategory>()
+                    .MaxDepth(1)
+                    .ReverseMap()
+                    .PreserveReferences();
+
+                config.CreateMap<RCategoryIcon, MCategoryIcon>()
                     .MaxDepth(1)
                     .ReverseMap()
                     .PreserveReferences();

@@ -7,9 +7,9 @@ namespace PFoursquare.API.Base
     public class BaseController : Controller
     {
         protected const string ClientIdHeaderKey = "client_id";
-        protected const string ClientIdHeaderValue = "x";
+        protected const string ClientIdHeaderValue = "";
         protected const string ClientSecretHeaderKey = "client_secret";
-        protected const string ClientSecretHeaderValue = "x";
+        protected const string ClientSecretHeaderValue = "";
         protected const string VersionHeaderKey = "v";
         protected const string VersionHeaderValue = "20170801";
         protected const string GetMethodName = "GET";

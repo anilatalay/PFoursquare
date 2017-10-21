@@ -29,32 +29,32 @@ namespace PFoursquare.API.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ApiReturn<MVenueCategory>> Categories()
+        public async Task<ApiReturn<List<RCategory>>> Categories()
         {
             try
             {
                 var url = $"{VenuesCategoriesUrl}?{AuthInfo.ToString()}";
-                var response = await HttpRequest.GetResponse<MVenueCategory>(url, GetMethodName, null, _headers);
+                var response = await HttpRequest.GetResponse<MBase>(url, GetMethodName, null, _headers);
 
                 if (response == null)
-                    return new ApiReturn<MVenueCategory>
+                    return new ApiReturn<List<RCategory>>
                     {
                         Code = ApiStatusCode.InternalServerError,
                         Message = "Kategoriler Alınamadı"
                     };
 
-                // TODO: MVenueCategory ile RVenueCategory Arasında Mapleme Yapılabilir
+                var categories = AutoMapper.Mapper.Map<List<RCategory>>(response.Response.Categories);
 
-                return new ApiReturn<MVenueCategory>
+                return new ApiReturn<List<RCategory>>
                 {
-                    Data = response,
+                    Data = categories,
                     Code = ApiStatusCode.Success,
                     Message = "OK"
                 };
             }
             catch (Exception ex)
             {
-                return new ApiReturn<MVenueCategory>
+                return new ApiReturn<List<RCategory>>
                 {
                     Code = ApiStatusCode.InternalServerError,
                     Message = ex.Message
@@ -82,7 +82,7 @@ namespace PFoursquare.API.Controllers.v1
                     };
 
                 var url = $"{VenuesDetailsUrl}/{id}?{AuthInfo.ToString()}";
-                var response = await HttpRequest.GetResponse<MVenueCategory>(url, GetMethodName, null, _headers);
+                var response = await HttpRequest.GetResponse<MBase>(url, GetMethodName, null, _headers);
 
                 return new ApiReturn<string>
                 {
