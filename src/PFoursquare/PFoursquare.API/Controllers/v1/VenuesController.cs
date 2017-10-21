@@ -13,8 +13,8 @@ namespace PFoursquare.API.Controllers.v1
     {
         // TODO: Url Appsetting Dosyasında Okunabilir
         private readonly string VenuesCategoriesUrl = "https://api.foursquare.com/v2/venues/categories";
+        private readonly string VenuesDetailsUrl = "https://api.foursquare.com/v2/venues";
         private readonly Dictionary<string, IEnumerable<string>> _headers;
-        private readonly StringBuilder _parameters;
 
         public VenuesController()
         {
@@ -22,23 +22,19 @@ namespace PFoursquare.API.Controllers.v1
             {
                 {ContentTypeHeaderKey, new[] {JsonContentType}}
             };
-
-            _parameters = new StringBuilder();
-            _parameters.Append($"{VenuesCategoriesUrl}");
-            _parameters.Append("?");
-            _parameters.Append($"{VersionHeaderKey}=x");
-            _parameters.Append("&");
-            _parameters.Append($"{ClientIdHeaderKey}=x");
-            _parameters.Append("&");
-            _parameters.Append($"{ClientSecretHeaderKey}=x");
         }
 
+        /// <summary>
+        /// Get categories of Venues
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ApiReturn<MVenueCategory>> Categories()
         {
             try
             {
-                var response = await HttpRequest.GetResponse<MVenueCategory>(_parameters.ToString(), PostMethodName, null, _headers);
+                var url = $"{VenuesCategoriesUrl}?{AuthInfo.ToString()}";
+                var response = await HttpRequest.GetResponse<MVenueCategory>(url, GetMethodName, null, _headers);
 
                 if (response == null)
                     return new ApiReturn<MVenueCategory>
@@ -53,12 +49,51 @@ namespace PFoursquare.API.Controllers.v1
                 {
                     Data = response,
                     Code = ApiStatusCode.Success,
-                    Message = "ok"
+                    Message = "OK"
                 };
             }
             catch (Exception ex)
             {
                 return new ApiReturn<MVenueCategory>
+                {
+                    Code = ApiStatusCode.InternalServerError,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        //[HttpGet]
+        //public ApiReturn<string> Search()
+        //{
+        //    // TODO: Arama Ksımı İçin Bölge Problemine Bakılacak
+        //    return null;
+        //}
+
+        [HttpGet("{id}")]
+        public async Task<ApiReturn<string>> Details(string id)
+        {
+            try
+            {
+                if (id == null)
+                    return new ApiReturn<string>
+                    {
+                        Code = ApiStatusCode.InternalServerError,
+                        Message = "Id Boş Bırakılamaz."
+                    };
+
+                var url = $"{VenuesDetailsUrl}/{id}?{AuthInfo.ToString()}";
+                var response = await HttpRequest.GetResponse<MVenueCategory>(url, GetMethodName, null, _headers);
+
+                return new ApiReturn<string>
+                {
+                    Data = null,
+                    Code = ApiStatusCode.Success,
+                    Message = "ok"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiReturn<string>
                 {
                     Code = ApiStatusCode.InternalServerError,
                     Message = ex.Message
