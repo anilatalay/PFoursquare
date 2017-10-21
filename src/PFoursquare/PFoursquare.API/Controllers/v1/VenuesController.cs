@@ -70,12 +70,12 @@ namespace PFoursquare.API.Controllers.v1
         //}
 
         [HttpGet("{id}")]
-        public async Task<ApiReturn<string>> Details(string id)
+        public async Task<ApiReturn<RVenue>> Details(string id)
         {
             try
             {
                 if (id == null)
-                    return new ApiReturn<string>
+                    return new ApiReturn<RVenue>
                     {
                         Code = ApiStatusCode.InternalServerError,
                         Message = "Id Boş Bırakılamaz."
@@ -84,16 +84,25 @@ namespace PFoursquare.API.Controllers.v1
                 var url = $"{VenuesDetailsUrl}/{id}?{AuthInfo.ToString()}";
                 var response = await HttpRequest.GetResponse<MBase>(url, GetMethodName, null, _headers);
 
-                return new ApiReturn<string>
+                if (response == null)
+                    return new ApiReturn<RVenue>
+                    {
+                        Code = ApiStatusCode.InternalServerError,
+                        Message = "Detaylar Alınamadı"
+                    };
+
+                var details = AutoMapper.Mapper.Map<RVenue>(response.Response.Venue);
+
+                return new ApiReturn<RVenue>
                 {
-                    Data = null,
+                    Data = details,
                     Code = ApiStatusCode.Success,
                     Message = "ok"
                 };
             }
             catch (Exception ex)
             {
-                return new ApiReturn<string>
+                return new ApiReturn<RVenue>
                 {
                     Code = ApiStatusCode.InternalServerError,
                     Message = ex.Message
