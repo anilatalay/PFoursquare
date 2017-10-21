@@ -41,7 +41,8 @@ namespace PFoursquare.API.Controllers.v1
                     return new ApiReturn<List<RCategory>>
                     {
                         Code = ApiStatusCode.InternalServerError,
-                        Message = "Kategoriler Alınamadı"
+                        Message = "Kategoriler Alınamadı",
+                        Success = false
                     };
 
                 var categories = AutoMapper.Mapper.Map<List<RCategory>>(response.Response.Categories);
@@ -50,7 +51,8 @@ namespace PFoursquare.API.Controllers.v1
                 {
                     Data = categories,
                     Code = ApiStatusCode.Success,
-                    Message = "OK"
+                    Message = "OK",
+                    Success = true
                 };
             }
             catch (Exception ex)
@@ -58,7 +60,8 @@ namespace PFoursquare.API.Controllers.v1
                 return new ApiReturn<List<RCategory>>
                 {
                     Code = ApiStatusCode.InternalServerError,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }
@@ -77,7 +80,8 @@ namespace PFoursquare.API.Controllers.v1
                     return new ApiReturn<List<RVenue>>
                     {
                         Code = ApiStatusCode.InternalServerError,
-                        Message = "Id Boş Bırakılamaz."
+                        Message = "Id Boş Bırakılamaz.",
+                        Success = false
                     };
 
                 // TODO: Arama Kısmı İçin Filter Yazılabilir
@@ -97,7 +101,8 @@ namespace PFoursquare.API.Controllers.v1
                     return new ApiReturn<List<RVenue>>
                     {
                         Code = ApiStatusCode.InternalServerError,
-                        Message = "Mekan Alınamadı"
+                        Message = "Mekan Alınamadı",
+                        Success = false
                     };
 
                 var venues = AutoMapper.Mapper.Map<List<RVenue>>(response.Response.Venues);
@@ -106,7 +111,7 @@ namespace PFoursquare.API.Controllers.v1
                 {
                     Data = venues,
                     Code = ApiStatusCode.Success,
-                    Message = "ok"
+                    Success = true
                 };
             }
             catch (Exception ex)
@@ -114,7 +119,8 @@ namespace PFoursquare.API.Controllers.v1
                 return new ApiReturn<List<RVenue>>
                 {
                     Code = ApiStatusCode.InternalServerError,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }
@@ -133,7 +139,8 @@ namespace PFoursquare.API.Controllers.v1
                     return new ApiReturn<RVenue>
                     {
                         Code = ApiStatusCode.InternalServerError,
-                        Message = "Id Boş Bırakılamaz."
+                        Message = "Id Boş Bırakılamaz.",
+                        Success = false
                     };
 
                 var url = $"{VenuesDetailsUrl}/{id}?{AuthInfo.ToString()}";
@@ -143,7 +150,8 @@ namespace PFoursquare.API.Controllers.v1
                     return new ApiReturn<RVenue>
                     {
                         Code = ApiStatusCode.InternalServerError,
-                        Message = "Detaylar Alınamadı"
+                        Message = "Detaylar Alınamadı",
+                        Success = false
                     };
 
                 var details = AutoMapper.Mapper.Map<RVenue>(response.Response.Venue);
@@ -152,7 +160,7 @@ namespace PFoursquare.API.Controllers.v1
                 {
                     Data = details,
                     Code = ApiStatusCode.Success,
-                    Message = "ok"
+                    Success = true
                 };
             }
             catch (Exception ex)
@@ -160,7 +168,8 @@ namespace PFoursquare.API.Controllers.v1
                 return new ApiReturn<RVenue>
                 {
                     Code = ApiStatusCode.InternalServerError,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Success = false
                 };
             }
         }
