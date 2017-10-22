@@ -7,12 +7,16 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './components/app/app.component';
 import { HomeComponent } from './components/home/home.component';
 import { MainComponent } from './components/main/main.component';
+import { PlaceComponent } from './components/place/place.component';
+import { PlaceDetailComponent } from './components/place-detail/place-detail.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        MainComponent
+        MainComponent,
+        PlaceComponent,
+        PlaceDetailComponent
     ],
     imports: [
         CommonModule,
