@@ -1,6 +1,14 @@
 <div *ngFor="let venue of venues">
-    <h3>venue.Name</h3>
-    <h4>venue.Location.Address</h4>
-    <h4>venue.Location.City</h4>
-    <h4>venue.Location.Country</h4>
+    <dix (click)="showDetail(venue)">
+        <h3>venue.Name</h3>
+        <h4>venue.Location.Address</h4>
+        <h4>venue.Location.City</h4>
+        <h4>venue.Location.Country</h4>
+    </dix>
+</div>
+
+<div>
+    <place-detail *ngIf="isShowDetail" [PlaceId]="placeId">
+        Loading..
+    </place-detail>
 </div>

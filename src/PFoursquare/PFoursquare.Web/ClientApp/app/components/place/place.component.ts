@@ -17,6 +17,8 @@ export class PlaceComponent implements OnInit {
     @Input('Search') search: Search;
 
     venues: Venue[];
+    isShowDetail: boolean = false;
+    placeId: string;
 
     constructor(private title: Title, private mainService: MainService) {
         title.setTitle("");
@@ -32,5 +34,9 @@ export class PlaceComponent implements OnInit {
             error => {
 
             });
+    }
+
+    showDetail(venue: Venue) {
+        this.placeId = venue.Id;
     }
 }
