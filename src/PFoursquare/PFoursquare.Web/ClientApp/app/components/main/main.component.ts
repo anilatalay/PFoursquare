@@ -8,6 +8,7 @@ import { MainService } from './main.service';
 
 import { Category } from '../../shared/models/category.model';
 import { Main } from '../../shared/models/main.model';
+import { Search } from '../../shared/models/search.model';
 
 @Component({
     selector: 'main',
@@ -18,7 +19,9 @@ import { Main } from '../../shared/models/main.model';
 export class MainComponent implements OnInit {
     myForm: FormGroup;
     submitted: boolean;
-    isShowModel: boolean;
+    isShowModel: boolean = false;
+    isSearchCompleted: boolean = false;
+    searcher: Search;
 
     categories: Array<Category> = [];
 
@@ -27,31 +30,52 @@ export class MainComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.isShowModel = false;
+        this.buildForm();
+    }
 
+    buildForm() {
         this.myForm = this.formBuilder.group({
             categoryId: ['', [<any>Validators.required, <any>Validators.minLength(3)]],
-            place: ['', ]
+            place: ['',]
         });
     }
 
     search(model: Main, isValid: boolean) {
-        if(!isValid) {
+        if (!isValid) {
             this.isShowModel = true;
             console.log("modal çıkar");
         } else {
             this.isShowModel = false;
 
-            console.log("this.mainService.getTest()");
-            console.log(this.mainService.getTest());
+            this.mainService.getCategories()
+                .subscribe(data => {
+                    if (data) {
+                        this.categories = data;
+                    }
+                },
+                error => {
 
+                });
+
+            let cat = this.categories.find(x => x.Id == model.CategoryId);
+            if (cat != undefined) {
+                this.searcher.CategoryId = cat.Id;
+                if (model.Search == "") {
+                    // TODO: Tarayıcıdan Konum Çeken Kodu Ekle
+                    this.searcher.Location = "";
+                } else {
+                    this.searcher.Area = model.Search;
+                }
+
+                this.isSearchCompleted = true;
+            }
         }
 
         console.log(model, isValid);
     }
 
     onlyAlfabet($event: any) {
-        if($event.charCode > 47 && $event.charCode < 58) {
+        if ($event.charCode > 47 && $event.charCode < 58) {
             return false;
         }
     }
