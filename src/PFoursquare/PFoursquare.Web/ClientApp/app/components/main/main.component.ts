@@ -41,13 +41,16 @@ export class MainComponent implements OnInit {
             console.log("modal çıkar");
         } else {
             this.isShowModel = false;
+
+            console.log("this.mainService.getTest()");
+            console.log(this.mainService.getTest());
+
         }
 
         console.log(model, isValid);
     }
 
     onlyAlfabet($event: any) {
-        console.log($event.charCode);
         if($event.charCode > 47 && $event.charCode < 58) {
             return false;
         }

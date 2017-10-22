@@ -6,23 +6,20 @@
                 <form [formGroup]="myForm" novalidate (ngSubmit)="search(myForm.value, myForm.valid)">
                     <input type="text" class="form-control" (keypress)="onlyAlfabet($event)" formControlName="categoryId" placeholder="Exp. Cafe, Bar">
                     <input type="text" class="form-control" formControlName="place" (keypress)="onlyAlfabet($event)" placeholder="Close to me">
-                    <button class="form-control" type="submit">Search</button>
+                    <!-- <button class="form-control" class="btn btn-primary" type="submit" data-target="#modal" data-toggle="modal">Search</button> -->
+                    <button class="form-control" class="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<div *ngIf="isShowModel" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-2">
-                        <h2>Model TEST</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div id="modal" *ngIf="isShowModel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>Kategori Boş Geçilemez!</p>
+      </div>
     </div>
+  </div>
 </div>

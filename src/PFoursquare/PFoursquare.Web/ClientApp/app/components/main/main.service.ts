@@ -15,11 +15,23 @@ export class MainService extends BaseService {
     private headers = new Headers();
     private headerKey = "Auth-Token";
     private headerValue = "B91F06CB-BD21-4867-9C35-DB49FD167993";
+    categories: Category[] = [];
 
     constructor(private http: Http) {
         super();
         // Middleware yazılabilir
         this.headers.append(this.headerKey, this.headerValue);
+    }
+
+    getTest(): Category[] {
+        for (var index = 0; index < 10; index++) {
+            let cat: Category = ({
+                Id: `${index}`,
+                Name: `Cafe-${index}`
+            } as Category);
+            this.categories.push();
+        }
+        return this.categories;
     }
 
     getCategories(): Observable<Category[]> {
@@ -39,17 +51,17 @@ export class MainService extends BaseService {
         return data;
     }
 
-    search(search: Search): Observable<Category[]> {
+    search(search: Search): Observable<Venue[]> {
         var data = this.http.post("http://localhost:60124/v1/Venues/Search/", search, { headers: this.headers})
         .map(res => {
             let body = res.json();
-            let categories: Category[] = [];
+            let venues: Venue[] = [];
 
             if (body.Data && body.Code == 200) {
-                categories = body.Data;
+                venues = body.Data;
             }
 
-            return categories;
+            return venues;
         })
         .catch(super.handleError);
 
